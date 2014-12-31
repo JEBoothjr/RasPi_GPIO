@@ -159,7 +159,8 @@ GPIO.initialize = function() {
 
     cpuInfo = fs.readFileSync(GPIO.GPIO_CPU_INFO_FILE, 'utf8');
     revMatch = cpuInfo.match(/Revision\s*:\s*[0-9a-f]*([0-9a-f]{4})/);
-    pinMap = (parseInt(revMatch[1], 16) < 4) ? PIN_MAP.V1 : PIN_MAP.V2;
+    //pinMap = (parseInt(revMatch[1], 16) < 4) ? PIN_MAP.V1 : PIN_MAP.V2;
+    pinMap = PIN_MAP.V2;
 
     GPIO.initialized = true;
 };

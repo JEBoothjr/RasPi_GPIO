@@ -1,15 +1,37 @@
 {
+    "author": "James Booth <jeboothjr@gmail.com>",
     "name": "RasPi_GPIO",
-    "description": "Raspberry Pi GPIO Library",
-    "version": "0.0.1",
+    "description": "A node.js-based GPIO library for Raspberry Pi.",
+    "version": "0.1.0",
     "private": true,
-    "main": "RasPi_GPIO.js",
+    "homepage": "https://github.com/JEBoothjr/RasPi_GPIO",
+    "main": "./RasPi_GPIO.js",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:JEBoothjr/RasPi_GPIO.git"
+    },
+    "bugs": {
+        "url": "https://github.com/JEBoothjr/RasPi_GPIO/issues"
+    },
+    "keywords": [
+        "gpio",
+        "raspberry",
+        "raspi",
+        "rpi",
+        "pi",
+        "gpio-admin"
+    ],
     "dependencies": {
         "async": "0.9.0",
         "lodash": "~2.4.1"
     },
+    "license": "MIT",
+    "engines": {
+        "node": ">=0.10.0"
+    },
     "devDependencies": {
         "del": "1.1.1",
+        "express": "4.x",
         "gulp": "3.x",
         "gulp-istanbul": "0.2.x",
         "gulp-istanbul-enforcer": "1.0.x",

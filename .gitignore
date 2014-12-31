@@ -4,3 +4,4 @@ server/public
 *.log
 *.DS_Store
 *.build
+coverage

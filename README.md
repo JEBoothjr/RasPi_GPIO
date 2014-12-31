@@ -124,7 +124,7 @@ async.series([
 ## TODO
 
 * Edge support.
-* Add synchronous reade/write calls.
+* Add synchronous read/write calls.
 * More testing.
 
 ## License

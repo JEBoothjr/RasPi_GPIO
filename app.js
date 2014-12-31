@@ -2,32 +2,31 @@ var express = require('express'),
     app = express(),
     GPIO = require('./RasPi_GPIO');
 
-var gpio7 = new GPIO(7, function(err) {
+var pin7 = new GPIO(7, function(err) {
     if (err) {
         console.log(err);
     }
 });
-// var gpio4 = new GPIO(4, function(err) {
-//     if (err) {
-//         console.log(err);
-//     }
-// });
+var pin8 = new GPIO(8, function(err) {
+    if (err) {
+        console.log(err);
+    }
+});
 
-app.put('/api/gpio/:channel_id/:channel_value', function(req, res) {
-    var channel_id = parseInt(req.params.channel_id),
-        channel_value = req.params.channel_value.toLowerCase(),
+app.put('/api/gpio/:pin_num/:pin_value', function(req, res) {
+    var pin_num = parseInt(req.params.pin_num),
+        pin_value = req.params.pin_value.toLowerCase(),
         io;
 
-    if (channel_id === 4) {
-        //io = gpio4;
-        return res.status(404).send('Unknown GPIO: ' + channel_id);
-    } else if (channel_id === 7) {
-        io = gpio7;
+    if (pin_num === 8) {
+        io = pin8;
+    } else if (pin_num === 7) {
+        io = pin7;
     } else {
-        return res.status(404).send('Unknown GPIO: ' + channel_id);
+        return res.status(404).send('Unsupported GPIO Pin: ' + pin_num);
     }
 
-    io.write(channel_value, function(err, result) {
+    io.write(pin_value, function(err, result) {
         if (err) {
             res.status(500).send(err.type + " : " + err.data);
         } else {
@@ -37,10 +36,39 @@ app.put('/api/gpio/:channel_id/:channel_value', function(req, res) {
 });
 
 var server = app.listen(3000, function() {
+    var port = server.address().port;
 
-    var host = server.address().address
-    var port = server.address().port
-
-    console.log('Example app listening at http://%s:%s', host, port)
-
+    console.log('RasPi app listening on port %s', port)
 });
+
+process.stdin.resume(); //so the program will not close instantly
+
+function exitHandler(options, err) {
+    pin7.unexport();
+    pin8.unexport();
+
+    if (options.cleanup) {
+        //console.log('clean');
+    }
+    if (err) {
+        logger.error(err.stack);
+    }
+    if (options.exit) {
+        process.exit();
+    }
+}
+
+//do something when app is closing
+process.on('exit', exitHandler.bind(null, {
+    cleanup: true
+}));
+
+//catches ctrl+c event
+process.on('SIGINT', exitHandler.bind(null, {
+    exit: true
+}));
+
+//catches uncaught exceptions
+process.on('uncaughtException', exitHandler.bind(null, {
+    exit: true
+}));

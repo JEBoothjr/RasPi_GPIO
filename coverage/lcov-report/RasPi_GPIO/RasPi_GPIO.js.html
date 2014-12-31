@@ -199,16 +199,16 @@
     <h1>Code coverage report for <span class="entity">RasPi_GPIO/RasPi_GPIO.js</span></h1>
     <h2>
         
-        Statements: <span class="metric">100% <small>(95 / 95)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Statements: <span class="metric">100% <small>(96 / 96)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Branches: <span class="metric">100% <small>(73 / 73)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">100% <small>(75 / 75)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
         Functions: <span class="metric">100% <small>(21 / 21)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Lines: <span class="metric">100% <small>(95 / 95)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">100% <small>(96 / 96)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         Ignored: <span class="metric">1 branch</span> &nbsp;&nbsp;&nbsp;&nbsp;
     </h2>
@@ -510,12 +510,16 @@
 292
 293
 294
-295</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+295
+296
+297
+298
+299
+300
+301</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -629,6 +633,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">30</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">30</span>
 <span class="cline-any cline-yes">30</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">30</span>
@@ -687,6 +692,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -703,6 +709,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">8</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -712,6 +719,7 @@
 <span class="cline-any cline-yes">8</span>
 <span class="cline-any cline-yes">8</span>
 <span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -746,6 +754,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -758,6 +767,7 @@
 <span class="cline-any cline-yes">3</span>
 <span class="cline-any cline-yes">3</span>
 <span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -785,6 +795,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">24</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -797,6 +808,7 @@
 <span class="cline-any cline-yes">3</span>
 <span class="cline-any cline-yes">3</span>
 <span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -815,8 +827,6 @@ var fs = require('fs'),
     child_process = require("child_process"),
     gpio_admin_command = 'gpio-admin',
     noop = function() {},
-    //ZERO = new Buffer('0'),
-    //ONE = new Buffer('1'),
     //DIR_IN = 'in',
     DIR_OUT = 'out',
     //EDGE_NONE = 'none',
@@ -908,11 +918,11 @@ util.inherits(GPIOError, Error);
 GPIOError.prototype.name = 'GPIOError';
 exports.GPIOError = GPIOError;
 &nbsp;
-function GPIO(gpio, options, callback) {
+function GPIO(pin, options, callback) {
     var self = this;
 &nbsp;
-    if (!gpio || isNaN(parseInt(gpio, 10))) {
-        throw new Error("A valid GPIO number is require when instantiating a GPIO.");
+    if (!pin || isNaN(parseInt(pin, 10))) {
+        throw new Error("A valid pin number is require when instantiating a GPIO.");
     }
 &nbsp;
     /* istanbul ignore else */
@@ -923,10 +933,11 @@ function GPIO(gpio, options, callback) {
 &nbsp;
     GPIO.initialize();
 &nbsp;
-    this.pin = pinMap[gpio];
+    this.pin = pin;
+    this.gpio = pinMap[pin];
 &nbsp;
-    if (typeof this.pin === 'undefined') {
-        throw new Error("This pin number, " + gpio + ", is not a valid pin.");
+    if (typeof this.gpio === 'undefined') {
+        throw new Error("This pin number, " + pin + ", is not a valid pin.");
     }
 &nbsp;
     if (options.export !== false) {
@@ -975,23 +986,25 @@ GPIO.prototype.read = function(callback) {
 &nbsp;
     callback = callback || noop; //Why would we need this, really?
 &nbsp;
-    fs.readFile(GPIO.GPIO_ROOT_PATH + "/gpio" + this.pin + "/value", function(err, val) {
+    fs.readFile(GPIO.GPIO_ROOT_PATH + "/gpio" + this.gpio + "/value", function(err, val) {
         if (err) {
             err = new GPIOError('read_error', {
-                pin: self.pin
+                pin: self.pin,
+                gpio: self.gpio
             });
         }
-        callback(err, val);
+        callback(err, parseInt(val));
     });
 };
 &nbsp;
 // GPIO.prototype.readSync = function() {
 //      var result;
 //     try {
-//         result = fs.readFileSync(GPIO.GPIO_ROOT_PATH + "/gpio" + this.pin + "/value");
+//         result = fs.readFileSync(GPIO.GPIO_ROOT_PATH + "/gpio" + this.gpio + "/value");
 //     } catch (e) {
 //         this.emit('error', new GPIOError('read_sync_error', {
 //             pin: this.pin
+//             gpio: this.gpio
 //         }));
 //     };
 //     return result;
@@ -1000,13 +1013,14 @@ GPIO.prototype.read = function(callback) {
 GPIO.prototype.write = function(value, callback) {
     var self = this;
 &nbsp;
-    value = toBoolean(value); //We want it to be a numeric boolean
+    value = toBoolean(value) ? 1 : 0; //We want it to be a numeric boolean
     callback = callback || noop;
 &nbsp;
-    fs.writeFile(GPIO.GPIO_ROOT_PATH + "/gpio" + this.pin + "/value", value, "utf8", function(err) {
+    fs.writeFile(GPIO.GPIO_ROOT_PATH + "/gpio" + this.gpio + "/value", value, "utf8", function(err) {
         if (err) {
             err = new GPIOError('write_error', {
-                pin: self.pin
+                pin: self.pin,
+                gpio: self.gpio
             });
         }
         callback(err, value);
@@ -1033,10 +1047,11 @@ GPIO.prototype.setDirection = function(dir, callback) {
         dir = !dir || _.isFunction(dir) ? DIR_OUT : dir;
     }
 &nbsp;
-    fs.writeFile(GPIO.GPIO_ROOT_PATH + "/gpio" + this.pin + "/direction", dir, "utf8", function(err) {
+    fs.writeFile(GPIO.GPIO_ROOT_PATH + "/gpio" + this.gpio + "/direction", dir, "utf8", function(err) {
         if (err) {
             err = new GPIOError('setDirection_error', {
                 pin: self.pin,
+                gpio: self.gpio,
                 direction: dir
             });
         }
@@ -1049,10 +1064,11 @@ GPIO.prototype.getDirection = function(callback) {
 &nbsp;
     callback = callback || noop;
 &nbsp;
-    fs.readFile(GPIO.GPIO_ROOT_PATH + "/gpio" + this.pin + "/direction", function(err, dir) {
+    fs.readFile(GPIO.GPIO_ROOT_PATH + "/gpio" + this.gpio + "/direction", function(err, dir) {
         if (err) {
             err = new GPIOError('getDirection_error', {
                 pin: self.pin,
+                gpio: self.gpio,
                 direction: dir
             });
         }
@@ -1072,10 +1088,11 @@ GPIO.prototype.export = function(options, callback) {
 &nbsp;
     pull = options.pull || '';
 &nbsp;
-    child_process.exec(gpio_admin_command + ' export ' + this.pin + ' ' + pull, function(err) {
+    child_process.exec(gpio_admin_command + ' export ' + this.gpio + ' ' + pull, function(err) {
         if (err) {
             err = new GPIOError('export_error', {
                 pin: self.pin,
+                gpio: self.gpio,
                 options: options
             });
         }
@@ -1088,10 +1105,11 @@ GPIO.prototype.unexport = function(callback) {
 &nbsp;
     callback = callback || noop;
 &nbsp;
-    child_process.exec(gpio_admin_command + " unexport " + this.pin, function(err) {
+    child_process.exec(gpio_admin_command + " unexport " + this.gpio, function(err) {
         if (err) {
             err = new GPIOError('unexport_error', {
-                pin: self.pin
+                pin: self.pin,
+                gpio: self.gpio
             });
         }
         callback(err, self);
@@ -1103,7 +1121,7 @@ module.exports = exports = GPIO;</pre></td></tr>
 
 </div>
 <div class="footer">
-    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Dec 31 2014 13:11:34 GMT-0800 (PST)</div>
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Dec 31 2014 15:20:37 GMT-0800 (PST)</div>
 </div>
 
 <script src="../prettify.js"></script>

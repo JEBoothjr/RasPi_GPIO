@@ -9,8 +9,6 @@ var fs = require('fs'),
     child_process = require("child_process"),
     gpio_admin_command = 'gpio-admin',
     noop = function() {},
-    //ZERO = new Buffer('0'),
-    //ONE = new Buffer('1'),
     //DIR_IN = 'in',
     DIR_OUT = 'out',
     //EDGE_NONE = 'none',
@@ -102,11 +100,11 @@ util.inherits(GPIOError, Error);
 GPIOError.prototype.name = 'GPIOError';
 exports.GPIOError = GPIOError;
 
-function GPIO(gpio, options, callback) {
+function GPIO(pin, options, callback) {
     var self = this;
 
-    if (!gpio || isNaN(parseInt(gpio, 10))) {
-        throw new Error("A valid GPIO number is require when instantiating a GPIO.");
+    if (!pin || isNaN(parseInt(pin, 10))) {
+        throw new Error("A valid pin number is require when instantiating a GPIO.");
     }
 
     /* istanbul ignore else */
@@ -117,10 +115,11 @@ function GPIO(gpio, options, callback) {
 
     GPIO.initialize();
 
-    this.pin = pinMap[gpio];
+    this.pin = pin;
+    this.gpio = pinMap[pin];
 
-    if (typeof this.pin === 'undefined') {
-        throw new Error("This pin number, " + gpio + ", is not a valid pin.");
+    if (typeof this.gpio === 'undefined') {
+        throw new Error("This pin number, " + pin + ", is not a valid pin.");
     }
 
     if (options.export !== false) {
@@ -159,8 +158,7 @@ GPIO.initialize = function() {
 
     cpuInfo = fs.readFileSync(GPIO.GPIO_CPU_INFO_FILE, 'utf8');
     revMatch = cpuInfo.match(/Revision\s*:\s*[0-9a-f]*([0-9a-f]{4})/);
-    //pinMap = (parseInt(revMatch[1], 16) < 4) ? PIN_MAP.V1 : PIN_MAP.V2;
-    pinMap = PIN_MAP.V2;
+    pinMap = (parseInt(revMatch[1], 16) < 4) ? PIN_MAP.V1 : PIN_MAP.V2;
 
     GPIO.initialized = true;
 };
@@ -170,23 +168,25 @@ GPIO.prototype.read = function(callback) {
 
     callback = callback || noop; //Why would we need this, really?
 
-    fs.readFile(GPIO.GPIO_ROOT_PATH + "/gpio" + this.pin + "/value", function(err, val) {
+    fs.readFile(GPIO.GPIO_ROOT_PATH + "/gpio" + this.gpio + "/value", function(err, val) {
         if (err) {
             err = new GPIOError('read_error', {
-                pin: self.pin
+                pin: self.pin,
+                gpio: self.gpio
             });
         }
-        callback(err, val);
+        callback(err, parseInt(val));
     });
 };
 
 // GPIO.prototype.readSync = function() {
 //      var result;
 //     try {
-//         result = fs.readFileSync(GPIO.GPIO_ROOT_PATH + "/gpio" + this.pin + "/value");
+//         result = fs.readFileSync(GPIO.GPIO_ROOT_PATH + "/gpio" + this.gpio + "/value");
 //     } catch (e) {
 //         this.emit('error', new GPIOError('read_sync_error', {
 //             pin: this.pin
+//             gpio: this.gpio
 //         }));
 //     };
 //     return result;
@@ -195,13 +195,14 @@ GPIO.prototype.read = function(callback) {
 GPIO.prototype.write = function(value, callback) {
     var self = this;
 
-    value = toBoolean(value); //We want it to be a numeric boolean
+    value = toBoolean(value) ? 1 : 0; //We want it to be a numeric boolean
     callback = callback || noop;
 
-    fs.writeFile(GPIO.GPIO_ROOT_PATH + "/gpio" + this.pin + "/value", value, "utf8", function(err) {
+    fs.writeFile(GPIO.GPIO_ROOT_PATH + "/gpio" + this.gpio + "/value", value, "utf8", function(err) {
         if (err) {
             err = new GPIOError('write_error', {
-                pin: self.pin
+                pin: self.pin,
+                gpio: self.gpio
             });
         }
         callback(err, value);
@@ -228,10 +229,11 @@ GPIO.prototype.setDirection = function(dir, callback) {
         dir = !dir || _.isFunction(dir) ? DIR_OUT : dir;
     }
 
-    fs.writeFile(GPIO.GPIO_ROOT_PATH + "/gpio" + this.pin + "/direction", dir, "utf8", function(err) {
+    fs.writeFile(GPIO.GPIO_ROOT_PATH + "/gpio" + this.gpio + "/direction", dir, "utf8", function(err) {
         if (err) {
             err = new GPIOError('setDirection_error', {
                 pin: self.pin,
+                gpio: self.gpio,
                 direction: dir
             });
         }
@@ -244,10 +246,11 @@ GPIO.prototype.getDirection = function(callback) {
 
     callback = callback || noop;
 
-    fs.readFile(GPIO.GPIO_ROOT_PATH + "/gpio" + this.pin + "/direction", function(err, dir) {
+    fs.readFile(GPIO.GPIO_ROOT_PATH + "/gpio" + this.gpio + "/direction", function(err, dir) {
         if (err) {
             err = new GPIOError('getDirection_error', {
                 pin: self.pin,
+                gpio: self.gpio,
                 direction: dir
             });
         }
@@ -267,10 +270,11 @@ GPIO.prototype.export = function(options, callback) {
 
     pull = options.pull || '';
 
-    child_process.exec(gpio_admin_command + ' export ' + this.pin + ' ' + pull, function(err) {
+    child_process.exec(gpio_admin_command + ' export ' + this.gpio + ' ' + pull, function(err) {
         if (err) {
             err = new GPIOError('export_error', {
                 pin: self.pin,
+                gpio: self.gpio,
                 options: options
             });
         }
@@ -283,10 +287,11 @@ GPIO.prototype.unexport = function(callback) {
 
     callback = callback || noop;
 
-    child_process.exec(gpio_admin_command + " unexport " + this.pin, function(err) {
+    child_process.exec(gpio_admin_command + " unexport " + this.gpio, function(err) {
         if (err) {
             err = new GPIOError('unexport_error', {
-                pin: self.pin
+                pin: self.pin,
+                gpio: self.gpio
             });
         }
         callback(err, self);

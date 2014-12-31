@@ -46,7 +46,7 @@ describe("RasPi_GPIO", function() {
 
             (function() {
                 var gpio = new GPIO();
-            }).should.throw("A valid GPIO number is require when instantiating a GPIO.");
+            }).should.throw("A valid pin number is require when instantiating a GPIO.");
 
             stub_write.restore();
             done();
@@ -99,7 +99,8 @@ describe("RasPi_GPIO", function() {
                 direction: 'out'
             });
 
-            (gpio1.pin).should.equal(0);
+            (gpio1.pin).should.equal(3);
+            (gpio1.gpio).should.equal(0);
 
             GPIO.initialized = false;
             GPIO.GPIO_CPU_INFO_FILE = CPU_INFO_V2; //Reset it to V2 for further tests
@@ -206,15 +207,16 @@ describe("RasPi_GPIO", function() {
                     callback(true);
                 }),
                 gpio = new GPIO(7).export(function(err, result) {
+                    stub_exec.restore();
+
                     should.exist(err);
                     should.equal(err.type, 'export_error');
-                    should.equal(err.data.pin, 4);
+                    should.equal(err.data.pin, 7);
+                    should.equal(err.data.gpio, 4);
                     should.exist(err.data.options);
+
+                    done();
                 });
-
-            stub_exec.restore();
-
-            done();
         });
     });
 
@@ -279,7 +281,8 @@ describe("RasPi_GPIO", function() {
                 }).unexport(function(err, result) {
                     should.exist(err);
                     should.equal(err.type, 'unexport_error');
-                    should.equal(err.data.pin, 4);
+                    should.equal(err.data.pin, 7);
+                    should.equal(err.data.gpio, 4);
 
                     stub_exec.restore();
 
@@ -311,7 +314,7 @@ describe("RasPi_GPIO", function() {
 
         it("Should read a GPIO using callback", function(done) {
             var stub_read = sinon.stub(fs, 'readFile', function(path, callback) {
-                    callback(null, 0);
+                    callback(null, '0');
                 }),
                 gpio = new GPIO(7);
 
@@ -354,7 +357,8 @@ describe("RasPi_GPIO", function() {
 
                 should.exist(err);
                 should.equal(err.type, 'read_error');
-                should.equal(err.data.pin, 4);
+                should.equal(err.data.pin, 7);
+                should.equal(err.data.gpio, 4);
 
                 done();
             });
@@ -506,7 +510,8 @@ describe("RasPi_GPIO", function() {
 
                 should.exist(err);
                 should.equal(err.type, 'write_error');
-                should.equal(err.data.pin, 4);
+                should.equal(err.data.pin, 7);
+                should.equal(err.data.gpio, 4);
 
                 done();
             });
@@ -575,7 +580,8 @@ describe("RasPi_GPIO", function() {
 
                 should.exist(err);
                 should.equal(err.type, 'setDirection_error');
-                should.equal(err.data.pin, 4);
+                should.equal(err.data.pin, 7);
+                should.equal(err.data.gpio, 4);
 
                 done();
             });
@@ -644,7 +650,8 @@ describe("RasPi_GPIO", function() {
 
                 should.exist(err);
                 should.equal(err.type, 'getDirection_error');
-                should.equal(err.data.pin, 4);
+                should.equal(err.data.pin, 7);
+                should.equal(err.data.gpio, 4);
 
                 done();
             });

@@ -5,7 +5,7 @@ A node.js-based GPIO library for Raspberry Pi.
 
 This was tested with Raspberry Pi Model B+, but should work with older versions as well.
 
-When instantiating a GPIO, the library requires you to provide the physical number as the GPIO number will be coordinated internally.
+When instantiating a GPIO, the library requires you to provide the physical pin number as the GPIO number will be coordinated internally.
 
 An example app, 'app.js', is provided.
 
@@ -123,7 +123,9 @@ async.series([
 
 ## TODO
 
-* Edge support and more testing.
+* Edge support.
+* Add synchronous reade/write calls.
+* More testing.
 
 ## License
 

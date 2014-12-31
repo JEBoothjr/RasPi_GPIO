@@ -51,7 +51,7 @@ function exitHandler(options, err) {
         //console.log('clean');
     }
     if (err) {
-        logger.error(err.stack);
+        console.error(err.stack);
     }
     if (options.exit) {
         process.exit();

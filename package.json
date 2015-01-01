@@ -1,6 +1,6 @@
 {
   "author": "James Booth <jeboothjr@gmail.com>",
-  "name": "raspi-gpio",
+  "name": "ras-pi-gpio",
   "description": "A node.js-based GPIO library for Raspberry Pi.",
   "version": "0.1.2",
   "homepage": "https://github.com/JEBoothjr/RasPi_GPIO",
